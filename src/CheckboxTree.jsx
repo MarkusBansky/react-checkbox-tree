@@ -3,12 +3,15 @@ import React, { Component } from 'react'
 import CheckboxTreeItem from './CheckboxTreeItem';
 
 class CheckboxTree extends Component {
+    checked = {}
+
     constructor(props) {
         super(props)
 
         // Set this node as a root for the tree
         this.isRoot = true;
         this.treeStateUpdated = this.treeStateUpdated.bind(this)
+        this.recurrentTreeAnalysis = this.recurrentTreeAnalysis.bind(this)
 
         this.state = {
             data: props.data,
@@ -17,8 +20,22 @@ class CheckboxTree extends Component {
     }
 
     treeStateUpdated() {
-        console.log('Triggering tree update event. This is the latest state:')
-        this.childCheckboxItems.map(c => console.log('Branch: ', c.getBranchValue()))
+        const { onChange } = this.props
+
+        this.checked = {}
+        this.childCheckboxItems.map(c => this.recurrentTreeAnalysis(c.getBranchValueFunction()))
+
+        if (onChange) onChange(this.checked)
+    }
+
+    recurrentTreeAnalysis(branch) {
+        if (branch.values.length > 0) {
+            if (!this.checked[branch.type]) this.checked[branch.type] = []
+            this.checked[branch.type].push(...branch.values)
+        }
+        if (branch.children) {
+            branch.children.map(c => this.recurrentTreeAnalysis(c))
+        }
     }
 
     addChildRef = (ref) => {

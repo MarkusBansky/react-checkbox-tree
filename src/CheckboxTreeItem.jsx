@@ -9,6 +9,8 @@ const style = (depth) => {
 }
 
 class CheckboxTreeItem extends Component {
+    childCheckboxItems = []
+
     constructor(props) {
         // Call base constructor from React.Component
         super(props)
@@ -27,58 +29,72 @@ class CheckboxTreeItem extends Component {
 
         // Assign a local callback function binding i to current object
         this.onCheckToggle = this.onCheckToggle.bind(this)
+        this.setCheckedState = this.setCheckedState.bind(this)
+        this.getBranchValueFunction = this.getBranchValue.bind(this)
+        this.afterCheckStateChanged = this.afterCheckStateChanged.bind(this)
     }
 
     getBranchValue() {
-        if (!this.state.children) return {}
+        const { children, type, isChecked, value } = this.state
+        const { accessors, depth } = this.props
 
-        if (this.getCheckedChildren().length == this.state.children.length)
+        if (!children || this.getCheckedChildren().length == children.length)
         {
             return {
-                type: this.state.type,
-                values: [this.state.value]
+                type: type,
+                values: isChecked ? [value] : []
             }
         }
         return {
-            type: this.props.accessors[this.props.depth + 1].type,
-            values: this.getCheckedChildren().map(c => c[this.props.accessors[this.props.depth + 1].value]),
-            children: this.state.childCheckboxItems ? this.state.childCheckboxItems.map(c => c.getBranchValue()) : ['none']
+            type: accessors[depth + 1].type,
+            values: [],
+            children: this.childCheckboxItems ? this.childCheckboxItems.map(c => c.getBranchValueFunction()) : []
         }
     }
 
     getCheckedChildren() {
-        return this.state.children ? this.state.children.filter(c => c.isChecked) : []
+        return this.state.children ? this.state.children.filter(c => c.isChecked === true) : []
     }
 
     setChildCheckedState(id, state) {
         this.state.children[id].isChecked = state
     }
 
-    onCheckToggle = (e) => {
-        const { isChecked, isExpanded, children } = this.state
-        const { parent, id } = this.props
-        const newState = e ? e.target.checked : !isChecked
+    setCheckedState(state, callback) {
+        const { children } = this.state
 
         // Change the state of isChecked input box for the item
-        this.setState({ ...this.state, isChecked: newState })
-
-        // Set this item as checked in the parent
-        if (parent && parent.setChildCheckedState)
-            parent.setChildCheckedState(id, newState)
+        this.setState({ ...this.state, isChecked: state }, () => callback ?callback(state) : '')
         
         // Set all child items checked
         if (children)
-            children.map((c, id) => this.setChildCheckedState(id, newState))
-        
+            children.map((c, id) => this.setChildCheckedState(id, state))
+
         // If it is expanded then change the state of all children
         // And also set isChecked for every child
         // Object can only be in epanded state if it has children
-        if (isExpanded) {
-            this.childCheckboxItems.map(c => c.onCheckToggle({ target: { checked: newState}}))
+        if (children) { //isExpanded
+            this.childCheckboxItems.map(c => c.setCheckedState(state))
         }
+    }
+
+    afterCheckStateChanged(state) {
+        const { parent, id } = this.props
+
+        // Set this item as checked in the parent
+        if (parent && parent.setChildCheckedState)
+            parent.setChildCheckedState(id, state)
 
         // Trigger tree update event
         this.props.treeUpdateTrigger()
+    }
+
+    onCheckToggle = (e) => {
+        const { isChecked } = this.state
+        const newState = e ? e.target.checked : !isChecked
+
+        // Set checked state for this element and all children
+        this.setCheckedState(newState, this.afterCheckStateChanged)
     }
 
     renderExpandButton() {
@@ -96,11 +112,11 @@ class CheckboxTreeItem extends Component {
     }
 
     renderChildren() {
-        const { children, isChecked, isExpanded } = this.state
+        const { children, isChecked } = this.state
         const { accessors, depth, treeUpdateTrigger } = this.props
-
-        if (!isExpanded) return ''
-        this.childCheckboxItems = []
+        
+        if (!children) return ''
+        // this.childCheckboxItems = []
 
         // Render all the children
         return children.map((d, key) => {
@@ -109,14 +125,16 @@ class CheckboxTreeItem extends Component {
     }
 
     render() {
-        const { label, isChecked } = this.state
+        const { label, isChecked, isExpanded } = this.state
         const { depth } = this.props
 
         // Render current item and all children
         return <div style={style(depth)} className='checkbox-item'>
             {this.renderExpandButton()}
             <input type='checkbox' onChange={this.onCheckToggle} checked={isChecked} />{label}<br />
-            {this.renderChildren()}
+            <div style={isExpanded ? {} : {display:'none'}}>
+                {this.renderChildren()}
+            </div>
         </div>
     }
 }
