@@ -1,25 +1,46 @@
 {
   "name": "checkbox-tree-react",
   "version": "0.1.1",
-  "keywords": ["react", "checkbox", "tree", "component"],
+  "keywords": [
+    "react",
+    "checkbox",
+    "tree",
+    "component"
+  ],
   "author": "Markiian Benovskyi",
   "description": "Creates a tree structure for you from your custom data. Uses react and bootstrap.",
-  "main": "src/CheckboxTree.js",
+  "main": "build/index.js",
   "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --watch",
+    "build": "webpack"
+  },
+  "peerDependencies": {
+    "react": "^16.6.3"
+  },
   "dependencies": {
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
     "@fortawesome/free-regular-svg-icons": "^5.9.0",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "autoprefixer": "^7.2.1",
-    "babel-preset-react-app": "^3.1.0",
+    "babel-loader": "^8.0.6",
     "lodash": "^4.17.11",
     "parcel-bundler": "^1.12.3",
     "react": "^16.6.3",
     "react-addons-update": "^15.6.2",
-    "react-dom": "^16.6.3"
+    "react-dom": "^16.6.3",
+    "webpack": "^4.33.0"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "cross-env": "^5.1.1"
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-transform-object-assign": "^7.2.0",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "cross-env": "^5.1.1",
+    "webpack-cli": "^3.3.3"
   }
 }

@@ -8,11 +8,11 @@ const style = (depth) => {
 }
 
 class CheckboxTreeItem extends Component {
-    childCheckboxItems = []
-
     constructor(props) {
         // Call base constructor from React.Component
         super(props)
+
+        this.childCheckboxItems = []
 
         // Populate the state of this item with these items
         // they can be variable and have shortcuts

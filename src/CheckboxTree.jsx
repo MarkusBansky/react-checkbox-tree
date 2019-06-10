@@ -4,14 +4,16 @@ import CheckboxTreeItem from './CheckboxTreeItem';
 import './style.css'
 
 class CheckboxTree extends Component {
-    checked = {}
-    childCheckboxItems = []
-
     constructor(props) {
         super(props)
 
+        this.childCheckboxItems = []
+        this.checked = {}
+
         // Set this node as a root for the tree
         this.isRoot = true;
+
+        this.addChildRef = this.addChildRef.bind(this)
         this.treeStateUpdated = this.treeStateUpdated.bind(this)
         this.recurrentTreeAnalysis = this.recurrentTreeAnalysis.bind(this)
 
@@ -41,7 +43,7 @@ class CheckboxTree extends Component {
         }
     }
 
-    addChildRef = (ref) => {
+    addChildRef(ref) {
         this.childCheckboxItems.push(ref)
     }
 
