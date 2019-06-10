@@ -1,6 +1,7 @@
 {
   "name": "checkbox-tree-react",
   "version": "0.1.1",
+  "keywords": ["react", "checkbox", "tree", "component"],
   "author": "Markiian Benovskyi",
   "description": "Creates a tree structure for you from your custom data. Uses react and bootstrap.",
   "main": "src/CheckboxTree.js",
