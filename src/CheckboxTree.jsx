@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import CheckboxTreeItem from './CheckboxTreeItem';
+import './style.css'
 
 class CheckboxTree extends Component {
     checked = {}

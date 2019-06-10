@@ -1,5 +1,7 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlusSquare, faMinusSquare } from '@fortawesome/free-regular-svg-icons'
 
 const style = (depth) => {
     return { marginLeft: `${depth * 30}px` }
@@ -99,7 +101,7 @@ class CheckboxTreeItem extends Component {
         if (isLeaf) return ''
 
         return <span onClick={() => this.setState({ ...this.state, isExpanded: !isExpanded })} className='arrow'>
-            {isExpanded ? '-' : '+'}
+            {isExpanded ? <FontAwesomeIcon icon={faMinusSquare} /> : <FontAwesomeIcon icon={faPlusSquare} />}
         </span>
     }
 
