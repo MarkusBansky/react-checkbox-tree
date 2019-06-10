@@ -1,11 +1,8 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
-import update from 'react-addons-update'
-
-var DEBUG = 1;
 
 const style = (depth) => {
-    return { marginLeft: `${depth*30}px` }
+    return { marginLeft: `${depth * 30}px` }
 }
 
 class CheckboxTreeItem extends Component {
@@ -38,8 +35,7 @@ class CheckboxTreeItem extends Component {
         const { children, type, isChecked, value } = this.state
         const { accessors, depth } = this.props
 
-        if (!children || this.getCheckedChildren().length == children.length)
-        {
+        if (!children || this.getCheckedChildren().length == children.length) {
             return {
                 type: type,
                 values: isChecked ? [value] : []
@@ -64,8 +60,8 @@ class CheckboxTreeItem extends Component {
         const { children } = this.state
 
         // Change the state of isChecked input box for the item
-        this.setState({ ...this.state, isChecked: state }, () => callback ?callback(state) : '')
-        
+        this.setState({ ...this.state, isChecked: state }, () => callback ? callback(state) : '')
+
         // Set all child items checked
         if (children)
             children.map((c, id) => this.setChildCheckedState(id, state))
@@ -100,10 +96,10 @@ class CheckboxTreeItem extends Component {
     renderExpandButton() {
         const { isExpanded, isLeaf } = this.state
 
-        if(isLeaf) return ''
+        if (isLeaf) return ''
 
         return <span onClick={() => this.setState({ ...this.state, isExpanded: !isExpanded })} className='arrow'>
-            {isExpanded?'-':'+'}
+            {isExpanded ? '-' : '+'}
         </span>
     }
 
@@ -114,7 +110,7 @@ class CheckboxTreeItem extends Component {
     renderChildren() {
         const { children, isChecked } = this.state
         const { accessors, depth, treeUpdateTrigger } = this.props
-        
+
         if (!children) return ''
         // this.childCheckboxItems = []
 
@@ -132,7 +128,7 @@ class CheckboxTreeItem extends Component {
         return <div style={style(depth)} className='checkbox-item'>
             {this.renderExpandButton()}
             <input type='checkbox' onChange={this.onCheckToggle} checked={isChecked} />{label}<br />
-            <div style={isExpanded ? {} : {display:'none'}}>
+            <div style={isExpanded ? {} : { display: 'none' }}>
                 {this.renderChildren()}
             </div>
         </div>

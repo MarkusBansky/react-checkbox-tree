@@ -4,6 +4,7 @@ import CheckboxTreeItem from './CheckboxTreeItem';
 
 class CheckboxTree extends Component {
     checked = {}
+    childCheckboxItems = []
 
     constructor(props) {
         super(props)
@@ -14,7 +15,6 @@ class CheckboxTree extends Component {
         this.recurrentTreeAnalysis = this.recurrentTreeAnalysis.bind(this)
 
         this.state = {
-            data: props.data,
             dataAccessors: props.accessors
         }
     }
@@ -26,6 +26,8 @@ class CheckboxTree extends Component {
         this.childCheckboxItems.map(c => this.recurrentTreeAnalysis(c.getBranchValueFunction()))
 
         if (onChange) onChange(this.checked)
+
+        // console.log(this.checked)
     }
 
     recurrentTreeAnalysis(branch) {
@@ -43,8 +45,8 @@ class CheckboxTree extends Component {
     }
 
     renderItems() {
-        const { data, dataAccessors } = this.state
-        this.childCheckboxItems = []
+        const { dataAccessors } = this.state
+        const { data } = this.props
 
         return _.map(data, (d, key) => {
             return <CheckboxTreeItem key={key} ref={this.addChildRef} item={d} accessors={dataAccessors} depth={0} treeUpdateTrigger={this.treeStateUpdated} />
