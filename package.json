@@ -1,6 +1,10 @@
 {
   "name": "checkbox-tree-react",
   "version": "0.1.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MarkusBansky/react-checkbox-tree"
+  },
   "keywords": [
     "react",
     "checkbox",
@@ -9,7 +13,7 @@
   ],
   "author": "Markiian Benovskyi",
   "description": "Creates a tree structure for you from your custom data. Uses react and bootstrap.",
-  "main": "src/CheckboxTree.js",
+  "main": "src/index.js",
   "license": "MIT",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
@@ -18,7 +22,6 @@
     "autoprefixer": "^7.2.1",
     "babel-preset-react-app": "^3.1.0",
     "lodash": "^4.17.11",
-    "parcel-bundler": "^1.12.3",
     "react": "^16.6.3",
     "react-addons-update": "^15.6.2",
     "react-dom": "^16.6.3"
@@ -32,6 +35,11 @@
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-react": "^7.13.0",
-    "eslint-plugin-standard": "^4.0.0"
+    "eslint-plugin-standard": "^4.0.0",
+    "nwb": "^0.23.0"
+  },
+  "scripts": {
+    "start": "nwb serve-react-app",
+    "build": "nwb build-react-app"
   }
 }
