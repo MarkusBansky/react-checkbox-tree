@@ -1,6 +1,7 @@
-import React from 'react'
-// eslint-disable-next-line no-unused-vars
-import CheckboxTree from 'src/CheckboxTree'
+import React, {Component} from 'react'
+import {render} from 'react-dom'
+
+import CheckboxTree from '../../src/CheckboxTree'
 
 const data = [
   {
@@ -40,8 +41,10 @@ const accessors = [
   }
 ]
 
-export default class App extends React.Component {
-  render () {
+class Demo extends Component {
+  render() {
     return <CheckboxTree data={data} accessors={accessors} />
   }
 }
+
+render(<Demo/>, document.querySelector('#demo'))

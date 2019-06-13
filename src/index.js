@@ -1,2 +1,2 @@
-/* eslint-disable no-unused-vars */
 import CheckboxTree from './CheckboxTree'
+export default CheckboxTree

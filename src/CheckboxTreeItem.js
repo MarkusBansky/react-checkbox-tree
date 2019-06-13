@@ -1,7 +1,5 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlusSquare, faMinusSquare } from '@fortawesome/free-regular-svg-icons'
 
 const style = (depth) => {
     return { marginLeft: `${depth * 30}px` }
@@ -46,7 +44,7 @@ class CheckboxTreeItem extends Component {
         return {
             type: accessors[depth + 1].type,
             values: [],
-            children: this.childCheckboxItems ? this.childCheckboxItems.map(c => c.getBranchValueFunction()) : []
+            children: this.childCheckboxItems ? _.map(this.childCheckboxItems, c => c.getBranchValueFunction()) : []
         }
     }
 
@@ -66,13 +64,13 @@ class CheckboxTreeItem extends Component {
 
         // Set all child items checked
         if (children)
-            children.map((c, id) => this.setChildCheckedState(id, state))
+            _.map(children, (c, id) => this.setChildCheckedState(id, state))
 
         // If it is expanded then change the state of all children
         // And also set isChecked for every child
         // Object can only be in epanded state if it has children
         if (children) { //isExpanded
-            this.childCheckboxItems.map(c => c.setCheckedState(state))
+            _.map(this.childCheckboxItems, c => c.setCheckedState(state))
         }
     }
 
@@ -100,9 +98,9 @@ class CheckboxTreeItem extends Component {
 
         if (isLeaf) return ''
 
-        return <span onClick={() => this.setState({ ...this.state, isExpanded: !isExpanded })} className='arrow'>
-            {isExpanded ? <FontAwesomeIcon icon={faMinusSquare} /> : <FontAwesomeIcon icon={faPlusSquare} />}
-        </span>
+        return (<span onClick={() => this.setState({ ...this.state, isExpanded: !isExpanded })} className='arrow'>
+            {isExpanded ? '-' : '+'}
+        </span>)
     }
 
     addChildRef = (ref) => {
@@ -117,8 +115,8 @@ class CheckboxTreeItem extends Component {
         // this.childCheckboxItems = []
 
         // Render all the children
-        return children.map((d, key) => {
-            return <CheckboxTreeItem key={key} id={key} ref={this.addChildRef} item={d} accessors={accessors} depth={depth + 1} parent={this} checked={isChecked || d.isChecked} treeUpdateTrigger={treeUpdateTrigger} />
+        return _.map(children, (d, key) => {
+            return (<CheckboxTreeItem key={key} id={key} ref={this.addChildRef} item={d} accessors={accessors} depth={depth + 1} parent={this} checked={isChecked || d.isChecked} treeUpdateTrigger={treeUpdateTrigger} />)
         })
     }
 
@@ -127,13 +125,13 @@ class CheckboxTreeItem extends Component {
         const { depth } = this.props
 
         // Render current item and all children
-        return <div style={style(depth)} className='checkbox-item'>
+        return (<div style={style(depth)} className='checkbox-item'>
             {this.renderExpandButton()}
             <input type='checkbox' onChange={this.onCheckToggle} checked={isChecked} />{label}<br />
             <div style={isExpanded ? {} : { display: 'none' }}>
                 {this.renderChildren()}
             </div>
-        </div>
+        </div>)
     }
 }
 
