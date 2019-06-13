@@ -10,6 +10,7 @@ cache:
 
 before_install:
   - npm install
+  - npm install coveralls
 
 script: "npm run test:coverage"
 
