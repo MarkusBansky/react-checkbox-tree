@@ -1,7 +1,7 @@
-# Create custom checkbox trees with `react-checkbox-tree`
+# Create checkbox trees with `react-checkbox-tree`
 
 [![npm version](https://badge.fury.io/js/checkbox-tree-react.svg)](https://badge.fury.io/js/checkbox-tree-react)
-
+[![Build Status](https://travis-ci.org/MarkusBansky/react-checkbox-tree.svg?branch=master)](https://travis-ci.org/MarkusBansky/react-checkbox-tree)
 
 Hi! I am a software developer and made this package to simplify life for some developers seeking similar solution for their react projects.
 This package let's you create a simple but custom checkbox tree from any data type you have, and implement it in your react project with a simple component.
