@@ -1,7 +1,12 @@
 {
   "name": "checkbox-tree-react",
   "version": "0.1.1",
-  "keywords": ["react", "checkbox", "tree", "component"],
+  "keywords": [
+    "react",
+    "checkbox",
+    "tree",
+    "component"
+  ],
   "author": "Markiian Benovskyi",
   "description": "Creates a tree structure for you from your custom data. Uses react and bootstrap.",
   "main": "src/CheckboxTree.js",
@@ -20,6 +25,13 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
-    "cross-env": "^5.1.1"
+    "cross-env": "^5.1.1",
+    "eslint": "^5.16.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-standard": "^4.0.0"
   }
 }
