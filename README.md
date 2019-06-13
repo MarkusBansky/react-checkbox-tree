@@ -1,6 +1,7 @@
 # Create checkbox trees with `react-checkbox-tree`
 
 [![npm version](https://badge.fury.io/js/checkbox-tree-react.svg)](https://badge.fury.io/js/checkbox-tree-react)
+[![Coverage Status](https://coveralls.io/repos/github/MarkusBansky/react-checkbox-tree/badge.svg?branch=master)](https://coveralls.io/github/MarkusBansky/react-checkbox-tree?branch=master)
 [![Build Status](https://travis-ci.org/MarkusBansky/react-checkbox-tree.svg?branch=master)](https://travis-ci.org/MarkusBansky/react-checkbox-tree)
 
 Hi! I am a software developer and made this package to simplify life for some developers seeking similar solution for their react projects.
