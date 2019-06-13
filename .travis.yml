@@ -9,7 +9,7 @@ cache:
     - $HOME/.npm
 
 before_install:
-  - npm install coveralls
+  - npm install
 
 script: "npm run test:coverage"
 
