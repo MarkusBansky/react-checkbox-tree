@@ -1,14 +1,10 @@
 import _ from 'lodash'
 import React from 'react'
-import {
-  CheckboxTreeItem
-} from './CheckboxTreeItem'
-import {
-  constructItemProperties
-} from './helperFunctions'
+import { CheckboxTreeItem } from './CheckboxTreeItem'
+import { constructItemProperties } from './helperFunctions'
 
 class CheckboxTree extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     // Set this node as a root for the tree
@@ -18,70 +14,52 @@ class CheckboxTree extends React.Component {
     // Handle all the children nodes here
     this.childCheckboxItems = []
 
-    this.updateCheckedValue = this.updateCheckedValue.bind(this)
+    // Bind methods
+    this.onUpdateTree = this.onUpdateTree.bind(this)
+    this.pushChildToRef = this.pushChildToRef.bind(this)
   }
 
-  pushChildToRef = (ref) => {
+  pushChildToRef (ref) {
     this.childCheckboxItems.push(ref)
   }
 
-  updateCheckedValue(type, value, isAdding) {
-    const {
-      onChange
-    } = this.props
+  onUpdateTree () {
+    const { onChange, accessors } = this.props
 
-    // Fisrt create an array object for this type
-    // if it does not exist already
-    if (!this.checked[type]) this.checked[type] = []
+    _.map(accessors, a => {
+      if (!this.checked[a.type]) this.checked[a.type] = []
+    })
 
-    // Remove or add this value into the tree
-    if (isAdding) {
-      this.checked[type].push(value)
-    } else {
-      // Remove any value that equals
-      for (var i = this.checked[type].length - 1; i >= 0; i--) {
-        if (this.checked[type][i] === value) {
-          this.checked[type].splice(i, 1);
-        }
-      }
-    }
+    // Get all data from child and insert into the checked status
+    let values = _.map(this.childCheckboxItems, c => c.getValues())
+    _.map(values, v => _.map(accessors, a => {
+      if (v[a.type]) this.checked[a.type] = v[a.type]
+    }))
 
     // Debug all values selected in the tree
-    console.log(JSON.stringify(this.checked))
+    console.log('Checked tree values: ' + JSON.stringify(this.checked))
 
     // If there is anything as a function for the change action
     // then run it with the data checked
     if (onChange) onChange(this.checked)
   }
 
-  renderItems() {
-    const {
-      data,
-      accessors
-    } = this.props
+  renderItems () {
+    const { data, accessors } = this.props
     console.log('Creating a checkbox tree with data: ', data, ' and accessors: ', accessors)
 
     return _.map(data, (d, key) => {
       return <CheckboxTreeItem
-      key = {
-        key
-      }
-      ref = {
-        this.pushChildToRef
-      }
-      onUpdateTree = {
-        this.updateCheckedValue
-      } {
-        ...constructItemProperties(d, accessors, 0, false)
-      }
+        key={key}
+        ref={this.pushChildToRef}
+        onUpdateTree={this.onUpdateTree}
+        {...constructItemProperties(d, accessors, 0, 'unchecked')}
       />
     })
   }
 
-  render() {
-    return <div className = 'checkbox-tree' > {
-        this.renderItems()
-      } </div>
+  render () {
+    return <div className='checkbox-tree' > {this.renderItems()} </div>
   }
 }
 
