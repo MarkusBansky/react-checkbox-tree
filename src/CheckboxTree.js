@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
+import PropTypes from 'prop-types'
 import { CheckboxTreeItem } from './CheckboxTreeItem'
 import { constructItemProperties } from './helperFunctions'
 
@@ -53,6 +54,8 @@ class CheckboxTree extends React.Component {
         key={key}
         ref={this.pushChildToRef}
         onUpdateTree={this.onUpdateTree}
+        checkboxPlusIcon={this.props.checkboxPlusIcon}
+        checkboxMinusIcon={this.props.checkboxMinusIcon}
         {...constructItemProperties(d, accessors, 0, 'unchecked')}
       />
     })
@@ -61,6 +64,14 @@ class CheckboxTree extends React.Component {
   render () {
     return <div className='checkbox-tree' > {this.renderItems()} </div>
   }
+}
+
+CheckboxTree.propTypes = {
+  data: PropTypes.array.isRequired,
+  accessors: PropTypes.array.isRequired,
+  onChange: PropTypes.func,
+  checkboxPlusIcon: PropTypes.object,
+  checkboxMinusIcon: PropTypes.object
 }
 
 export default CheckboxTree

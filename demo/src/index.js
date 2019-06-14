@@ -1,7 +1,11 @@
-import React, {Component} from 'react'
-import {render} from 'react-dom'
-
+/* eslint-disable no-unused-vars */
+import React from 'react'
+import { render } from 'react-dom'
 import CheckboxTree from '../../src/CheckboxTree'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlusSquare, faMinusSquare } from '@fortawesome/free-regular-svg-icons'
+
+import 'bootstrap'
 
 const data = [
   {
@@ -15,6 +19,14 @@ const data = [
         'competitions': [
           { 'id': 2347, 'name': 'Daytona Beach' },
           { 'id': 2342, 'name': 'Palm Beach' }
+        ]
+      },
+      {
+        'id': 432,
+        'name': 'UA',
+        'competitions': [
+          { 'id': 32, 'name': 'Kyiv Beach' },
+          { 'id': 5678, 'name': 'Lviv' }
         ]
       }
     ]
@@ -41,9 +53,14 @@ const accessors = [
   }
 ]
 
-class Demo extends Component {
-  render() {
-    return <CheckboxTree data={data} accessors={accessors} />
+class Demo extends React.Component {
+  render () {
+    return <CheckboxTree
+      data={data}
+      accessors={accessors} c
+      checkboxPlusIcon={<FontAwesomeIcon icon={faPlusSquare} />}
+      checkboxMinusIcon={<FontAwesomeIcon icon={faMinusSquare} />}
+    />
   }
 }
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { constructItemProperties } from './helperFunctions'
 
-const style = (depth) => { return { marginLeft: `${depth * 30}px` } }
+const style = (depth) => { return { marginLeft: `${depth * 15}px` } }
 
 export class CheckboxTreeItem extends React.Component {
   constructor (props) {
@@ -33,7 +33,7 @@ export class CheckboxTreeItem extends React.Component {
 
   getValues () {
     const { checkedState } = this.state
-    const { accessors, type, value, label } = this.props
+    const { accessors, type, value } = this.props
 
     let values = {}
 
@@ -134,10 +134,13 @@ export class CheckboxTreeItem extends React.Component {
 
     if (this.isLeaf) return ''
 
+    let plus = this.props.checkboxPlusIcon ? this.props.checkboxPlusIcon : '+'
+    let minus = this.props.checkboxMinusIcon ? this.props.checkboxMinusIcon : '-'
+
     return <span
       onClick={() => this.setState({ ...this.state, isExpanded: !isExpanded })}
       className='arrow'>
-      {isExpanded ? '-' : '+'}
+      {isExpanded ? minus : plus}
     </span>
   }
 
@@ -162,6 +165,9 @@ export class CheckboxTreeItem extends React.Component {
         ref={this.addChildRef}
         parent={this}
         onUpdateTree={onUpdateTree}
+        checkboxClass={this.props.checkboxClass}
+        checkboxPlusIcon={this.props.checkboxPlusIcon}
+        checkboxMinusIcon={this.props.checkboxMinusIcon}
         {...constructItemProperties(d, accessors, depth + 1, childState)}
       />
     })
@@ -178,6 +184,8 @@ export class CheckboxTreeItem extends React.Component {
         type='checkbox'
         onChange={this.onCheckToggle}
         checked={checkedState === 'checked'}
+        className={this.props.checkboxClass ? this.props.checkboxClass : ''}
+        style={{ margin: '5px 6px' }}
         ref={el => el && (el.indeterminate = checkedState === 'indeterminate')} />
       {label}
       <br />
@@ -196,5 +204,7 @@ CheckboxTreeItem.propTypes = {
   checked: PropTypes.string,
   accessors: PropTypes.array,
   parent: PropTypes.object,
-  onUpdateTree: PropTypes.func.isRequired
+  onUpdateTree: PropTypes.func.isRequired,
+  checkboxPlusIcon: PropTypes.object,
+  checkboxMinusIcon: PropTypes.object
 }
