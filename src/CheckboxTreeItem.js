@@ -95,6 +95,7 @@ export class CheckboxTreeItem extends React.Component {
   }
 
   setCheckedState (state, callback) {
+    const { isExpanded } = this.state
     const { children } = this.props
 
     // Change the state of checkedState input box for the item
@@ -110,7 +111,7 @@ export class CheckboxTreeItem extends React.Component {
     // If it is expanded then change the state of all children
     // And also set checkedState for every child
     // Object can only be in epanded state if it has children
-    if (children) { // isExpanded
+    if (isExpanded && children && this.childCheckboxItems) { // isExpanded
       _.map(this.childCheckboxItems, c => c.setCheckedState(state))
     }
   }
@@ -156,7 +157,10 @@ export class CheckboxTreeItem extends React.Component {
     const { checkedState, isExpanded } = this.state
     const { accessors, depth, onUpdateTree, children } = this.props
 
-    if (!isExpanded) return ''
+    if (!isExpanded) {
+      this.childCheckboxItems = []
+      return ''
+    }
 
     // Render all the children
     return _.map(children, (d, key) => {
