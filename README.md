@@ -4,6 +4,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/MarkusBansky/react-checkbox-tree/badge.svg?branch=master)](https://coveralls.io/github/MarkusBansky/react-checkbox-tree?branch=master)
 [![Build Status](https://travis-ci.org/MarkusBansky/react-checkbox-tree.svg?branch=master)](https://travis-ci.org/MarkusBansky/react-checkbox-tree)
 
+<img src="screenshot.png" height="200px" />
+
 Hi! I am a software developer and made this package to simplify life for some developers seeking similar solution for their react projects.
 This package let's you create a simple but custom checkbox tree from any data type you have, and implement it in your react project with a simple component.
 

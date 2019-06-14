@@ -9,3 +9,7 @@ package-lock.json
 test/
 es
 lib
+lib/CheckboxTreeItem.js
+lib/CheckboxTree.js
+es/CheckboxTreeItem.js
+es/CheckboxTree.js

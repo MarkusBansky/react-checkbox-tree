@@ -8,6 +8,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 import _ from 'lodash';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { CheckboxTreeItem } from './CheckboxTreeItem';
 import { constructItemProperties } from './helperFunctions';
 
@@ -81,7 +82,9 @@ var CheckboxTree = function (_React$Component) {
       return React.createElement(CheckboxTreeItem, _extends({
         key: key,
         ref: _this3.pushChildToRef,
-        onUpdateTree: _this3.onUpdateTree
+        onUpdateTree: _this3.onUpdateTree,
+        checkboxPlusIcon: _this3.props.checkboxPlusIcon,
+        checkboxMinusIcon: _this3.props.checkboxMinusIcon
       }, constructItemProperties(d, accessors, 0, 'unchecked')));
     });
   };
@@ -98,5 +101,13 @@ var CheckboxTree = function (_React$Component) {
 
   return CheckboxTree;
 }(React.Component);
+
+CheckboxTree.propTypes = process.env.NODE_ENV !== "production" ? {
+  data: PropTypes.array.isRequired,
+  accessors: PropTypes.array.isRequired,
+  onChange: PropTypes.func,
+  checkboxPlusIcon: PropTypes.object,
+  checkboxMinusIcon: PropTypes.object
+} : {};
 
 export default CheckboxTree;

@@ -11,8 +11,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { constructItemProperties } from './helperFunctions';
 
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
 var style = function style(depth) {
-  return { marginLeft: depth * 30 + 'px' };
+  return { marginLeft: depth * 15 + 'px' };
 };
 
 export var CheckboxTreeItem = function (_React$Component) {
@@ -51,8 +53,7 @@ export var CheckboxTreeItem = function (_React$Component) {
     var _props = this.props,
         accessors = _props.accessors,
         type = _props.type,
-        value = _props.value,
-        label = _props.label;
+        value = _props.value;
 
 
     var values = {};
@@ -118,6 +119,8 @@ export var CheckboxTreeItem = function (_React$Component) {
       function () {
         return _this2.setItemCheckedStateInParent(_this2.props.id, newState, callback);
       });
+    } else if (callback) {
+      callback();
     }
   };
 
@@ -175,6 +178,9 @@ export var CheckboxTreeItem = function (_React$Component) {
 
     if (this.isLeaf) return '';
 
+    var plus = this.props.checkboxPlusIcon ? this.props.checkboxPlusIcon : '+';
+    var minus = this.props.checkboxMinusIcon ? this.props.checkboxMinusIcon : '-';
+
     return React.createElement(
       'span',
       {
@@ -182,7 +188,7 @@ export var CheckboxTreeItem = function (_React$Component) {
           return _this4.setState(_extends({}, _this4.state, { isExpanded: !isExpanded }));
         },
         className: 'arrow' },
-      isExpanded ? '-' : '+'
+      isExpanded ? minus : plus
     );
   };
 
@@ -213,7 +219,9 @@ export var CheckboxTreeItem = function (_React$Component) {
         key: key,
         ref: _this5.addChildRef,
         parent: _this5,
-        onUpdateTree: onUpdateTree
+        onUpdateTree: onUpdateTree,
+        checkboxPlusIcon: _this5.props.checkboxPlusIcon,
+        checkboxMinusIcon: _this5.props.checkboxMinusIcon
       }, constructItemProperties(d, accessors, depth + 1, childState)));
     });
   };
@@ -224,7 +232,8 @@ export var CheckboxTreeItem = function (_React$Component) {
         isExpanded = _state2.isExpanded;
     var _props3 = this.props,
         depth = _props3.depth,
-        label = _props3.label;
+        label = _props3.label,
+        id = _props3.id;
 
     // Render current item and all children
 
@@ -232,14 +241,26 @@ export var CheckboxTreeItem = function (_React$Component) {
       'div',
       { style: style(depth), className: 'checkbox-item' },
       this.renderExpandButton(),
-      React.createElement('input', {
-        type: 'checkbox',
-        onChange: this.onCheckToggle,
-        checked: checkedState === 'checked',
-        ref: function ref(el) {
-          return el && (el.indeterminate = checkedState === 'indeterminate');
-        } }),
-      label,
+      React.createElement(
+        'div',
+        {
+          className: 'custom-control custom-checkbox',
+          style: { margin: '2px 6px', display: 'inline-block' } },
+        React.createElement('input', {
+          type: 'checkbox',
+          id: label + '-' + id,
+          onChange: this.onCheckToggle,
+          checked: checkedState === 'checked',
+          className: 'custom-control-input',
+          ref: function ref(el) {
+            return el && (el.indeterminate = checkedState === 'indeterminate');
+          } }),
+        React.createElement(
+          'label',
+          { className: 'custom-control-label', htmlFor: label + '-' + id },
+          label
+        )
+      ),
       React.createElement('br', null),
       React.createElement(
         'div',
@@ -260,5 +281,7 @@ CheckboxTreeItem.propTypes = process.env.NODE_ENV !== "production" ? {
   checked: PropTypes.string,
   accessors: PropTypes.array,
   parent: PropTypes.object,
-  onUpdateTree: PropTypes.func.isRequired
+  onUpdateTree: PropTypes.func.isRequired,
+  checkboxPlusIcon: PropTypes.object,
+  checkboxMinusIcon: PropTypes.object
 } : {};
