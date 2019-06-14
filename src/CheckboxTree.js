@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
-import CheckboxTreeItem from './CheckboxTreeItem'
+import { CheckboxTreeItem } from './CheckboxTreeItem'
+import { constructItemProperties } from './helperFunctions'
 
 class CheckboxTree extends React.Component {
   constructor (props) {
@@ -13,32 +14,34 @@ class CheckboxTree extends React.Component {
     // Handle all the children nodes here
     this.childCheckboxItems = []
 
-    this.treeStateUpdated = this.treeStateUpdated.bind(this)
-    this.recurrentTreeAnalysis = this.recurrentTreeAnalysis.bind(this)
+    // Bind methods
+    this.onUpdateTree = this.onUpdateTree.bind(this)
+    this.pushChildToRef = this.pushChildToRef.bind(this)
   }
 
-  pushChildToRef = (ref) => {
+  pushChildToRef (ref) {
     this.childCheckboxItems.push(ref)
   }
 
-  treeStateUpdated () {
-    const { onChange } = this.props
-    // Create a fresh new checked object
+  onUpdateTree () {
+    const { onChange, accessors } = this.props
+
+    // Reset the checked state
     this.checked = {}
-    // Recurrently check the values in every child
-    _.map(this.childCheckboxItems, c => this.recurrentTreeAnalysis(c.getBranchValueFunction()))
+    _.each(accessors, a => { this.checked[a.type] = [] })
+
+    // Get all data from child and insert into the checked status
+    let values = _.map(this.childCheckboxItems, c => c.getValues())
+    _.map(values, v => _.map(accessors, a => {
+      if (v[a.type]) this.checked[a.type] = v[a.type]
+    }))
+
+    // Debug all values selected in the tree
+    console.log('Checked tree values: ' + JSON.stringify(this.checked))
 
     // If there is anything as a function for the change action
     // then run it with the data checked
     if (onChange) onChange(this.checked)
-  }
-
-  recurrentTreeAnalysis (branch) {
-    if (branch.values.length > 0) {
-      if (!this.checked[branch.type]) this.checked[branch.type] = []
-      this.checked[branch.type].push(...branch.values)
-    }
-    _.map(branch.children, c => this.recurrentTreeAnalysis(c))
   }
 
   renderItems () {
@@ -47,19 +50,16 @@ class CheckboxTree extends React.Component {
 
     return _.map(data, (d, key) => {
       return <CheckboxTreeItem
-        item={d}
-        depth={0}
         key={key}
-        accessors={accessors}
         ref={this.pushChildToRef}
-        treeUpdateTrigger={this.treeStateUpdated} />
+        onUpdateTree={this.onUpdateTree}
+        {...constructItemProperties(d, accessors, 0, 'unchecked')}
+      />
     })
   }
 
   render () {
-    return <div className='checkbox-tree'>
-      {this.renderItems()}
-    </div>
+    return <div className='checkbox-tree' > {this.renderItems()} </div>
   }
 }
 
