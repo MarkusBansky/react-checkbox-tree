@@ -26,9 +26,9 @@ class CheckboxTree extends React.Component {
   onUpdateTree () {
     const { onChange, accessors } = this.props
 
-    _.map(accessors, a => {
-      if (!this.checked[a.type]) this.checked[a.type] = []
-    })
+    // Reset the checked state
+    this.checked = {}
+    _.each(accessors, a => { this.checked[a.type] = [] })
 
     // Get all data from child and insert into the checked status
     let values = _.map(this.childCheckboxItems, c => c.getValues())

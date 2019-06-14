@@ -37,8 +37,6 @@ export class CheckboxTreeItem extends React.Component {
 
     let values = {}
 
-    console.log(label, checkedState)
-
     if (checkedState === 'checked') {
       values[type] = [value]
     } else {
@@ -57,9 +55,7 @@ export class CheckboxTreeItem extends React.Component {
     const { parent } = this.props
     if (parent && parent.setChildCheckedState) {
       parent.setChildCheckedState(id, state, callback)
-    }
-
-    if (callback) callback()
+    } else if (callback) callback()
   }
 
   setChildCheckedState (id, state, callback) {
@@ -91,8 +87,6 @@ export class CheckboxTreeItem extends React.Component {
           this.props.id,
           newState,
           callback))
-    } else {
-      if (callback) callback()
     }
   }
 
@@ -125,7 +119,7 @@ export class CheckboxTreeItem extends React.Component {
       id,
       state,
       // Trigger tree update event
-      this.props.onUpdateTree())
+      this.props.onUpdateTree)
   }
 
   onCheckToggle (e) {
