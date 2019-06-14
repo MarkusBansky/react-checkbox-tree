@@ -5,7 +5,7 @@ import { constructItemProperties } from './helperFunctions'
 
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 
-const style = (depth) => { return { marginLeft: `${depth * 15}px` } }
+const style = (depth) => { return { marginLeft: `${(depth - 1) * 15}px` } }
 
 export class CheckboxTreeItem extends React.Component {
   constructor (props) {
