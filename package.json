@@ -38,13 +38,13 @@
   "devDependencies": {
     "@fortawesome/free-brands-svg-icons": "^5.9.0",
     "@fortawesome/free-regular-svg-icons": "^5.9.0",
-    "bootstrap": "^4.3.1",
     "nwb": "0.23.x",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "jquery": "^3.4.1"
   },
   "dependencies": {
-    "react-bootstrap": "^1.0.0-beta.9"
+    "bootstrap": "^4.3.1"
   }
 }

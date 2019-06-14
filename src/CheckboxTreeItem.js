@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { constructItemProperties } from './helperFunctions'
 
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+
 const style = (depth) => { return { marginLeft: `${depth * 15}px` } }
 
 export class CheckboxTreeItem extends React.Component {
@@ -87,6 +89,8 @@ export class CheckboxTreeItem extends React.Component {
           this.props.id,
           newState,
           callback))
+    } else if (callback) {
+      callback()
     }
   }
 
@@ -165,7 +169,6 @@ export class CheckboxTreeItem extends React.Component {
         ref={this.addChildRef}
         parent={this}
         onUpdateTree={onUpdateTree}
-        checkboxClass={this.props.checkboxClass}
         checkboxPlusIcon={this.props.checkboxPlusIcon}
         checkboxMinusIcon={this.props.checkboxMinusIcon}
         {...constructItemProperties(d, accessors, depth + 1, childState)}
@@ -175,19 +178,25 @@ export class CheckboxTreeItem extends React.Component {
 
   render () {
     const { checkedState, isExpanded } = this.state
-    const { depth, label } = this.props
+    const { depth, label, id } = this.props
 
     // Render current item and all children
     return <div style={style(depth)} className='checkbox-item'>
       {this.renderExpandButton()}
-      <input
-        type='checkbox'
-        onChange={this.onCheckToggle}
-        checked={checkedState === 'checked'}
-        className={this.props.checkboxClass ? this.props.checkboxClass : ''}
-        style={{ margin: '5px 6px' }}
-        ref={el => el && (el.indeterminate = checkedState === 'indeterminate')} />
-      {label}
+      <div
+        className='custom-control custom-checkbox'
+        style={{ margin: '2px 6px', display: 'inline-block' }}>
+        <input
+          type='checkbox'
+          id={`${label}-${id}`}
+          onChange={this.onCheckToggle}
+          checked={checkedState === 'checked'}
+          className='custom-control-input'
+          ref={el => el && (el.indeterminate = checkedState === 'indeterminate')} />
+        <label className='custom-control-label' htmlFor={`${label}-${id}`}>
+          {label}
+        </label>
+      </div>
       <br />
       <div style={isExpanded ? {} : { display: 'none' }}>
         {this.renderChildren()}

@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import 'jquery'
 import React from 'react'
 import { render } from 'react-dom'
 import CheckboxTree from '../../src/CheckboxTree'
