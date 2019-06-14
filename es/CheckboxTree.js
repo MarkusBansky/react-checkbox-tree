@@ -1,3 +1,5 @@
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -6,7 +8,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 import _ from 'lodash';
 import React from 'react';
-import CheckboxTreeItem from './CheckboxTreeItem';
+import { CheckboxTreeItem } from './CheckboxTreeItem';
+import { constructItemProperties } from './helperFunctions';
 
 var CheckboxTree = function (_React$Component) {
   _inherits(CheckboxTree, _React$Component);
@@ -17,69 +20,69 @@ var CheckboxTree = function (_React$Component) {
     // Set this node as a root for the tree
     var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
 
-    _this.pushChildToRef = function (ref) {
-      _this.childCheckboxItems.push(ref);
-    };
-
     _this.isRoot = true;
     // Define the checked field holding all checked nodes data
     _this.checked = {};
     // Handle all the children nodes here
     _this.childCheckboxItems = [];
 
-    _this.treeStateUpdated = _this.treeStateUpdated.bind(_this);
-    _this.recurrentTreeAnalysis = _this.recurrentTreeAnalysis.bind(_this);
+    // Bind methods
+    _this.onUpdateTree = _this.onUpdateTree.bind(_this);
+    _this.pushChildToRef = _this.pushChildToRef.bind(_this);
     return _this;
   }
 
-  CheckboxTree.prototype.treeStateUpdated = function treeStateUpdated() {
+  CheckboxTree.prototype.pushChildToRef = function pushChildToRef(ref) {
+    this.childCheckboxItems.push(ref);
+  };
+
+  CheckboxTree.prototype.onUpdateTree = function onUpdateTree() {
     var _this2 = this;
 
-    var onChange = this.props.onChange;
-    // Create a fresh new checked object
+    var _props = this.props,
+        onChange = _props.onChange,
+        accessors = _props.accessors;
+
+    // Reset the checked state
 
     this.checked = {};
-    // Recurrently check the values in every child
-    _.map(this.childCheckboxItems, function (c) {
-      return _this2.recurrentTreeAnalysis(c.getBranchValueFunction());
+    _.each(accessors, function (a) {
+      _this2.checked[a.type] = [];
     });
+
+    // Get all data from child and insert into the checked status
+    var values = _.map(this.childCheckboxItems, function (c) {
+      return c.getValues();
+    });
+    _.map(values, function (v) {
+      return _.map(accessors, function (a) {
+        if (v[a.type]) _this2.checked[a.type] = v[a.type];
+      });
+    });
+
+    // Debug all values selected in the tree
+    console.log('Checked tree values: ' + JSON.stringify(this.checked));
 
     // If there is anything as a function for the change action
     // then run it with the data checked
     if (onChange) onChange(this.checked);
   };
 
-  CheckboxTree.prototype.recurrentTreeAnalysis = function recurrentTreeAnalysis(branch) {
+  CheckboxTree.prototype.renderItems = function renderItems() {
     var _this3 = this;
 
-    if (branch.values.length > 0) {
-      var _checked$branch$type;
-
-      if (!this.checked[branch.type]) this.checked[branch.type] = [];
-      (_checked$branch$type = this.checked[branch.type]).push.apply(_checked$branch$type, branch.values);
-    }
-    _.map(branch.children, function (c) {
-      return _this3.recurrentTreeAnalysis(c);
-    });
-  };
-
-  CheckboxTree.prototype.renderItems = function renderItems() {
-    var _this4 = this;
-
-    var _props = this.props,
-        data = _props.data,
-        accessors = _props.accessors;
+    var _props2 = this.props,
+        data = _props2.data,
+        accessors = _props2.accessors;
 
     console.log('Creating a checkbox tree with data: ', data, ' and accessors: ', accessors);
 
     return _.map(data, function (d, key) {
-      return React.createElement(CheckboxTreeItem, {
-        item: d,
-        depth: 0,
+      return React.createElement(CheckboxTreeItem, _extends({
         key: key,
-        accessors: accessors,
-        ref: _this4.pushChildToRef,
-        treeUpdateTrigger: _this4.treeStateUpdated });
+        ref: _this3.pushChildToRef,
+        onUpdateTree: _this3.onUpdateTree
+      }, constructItemProperties(d, accessors, 0, 'unchecked')));
     });
   };
 
@@ -87,7 +90,9 @@ var CheckboxTree = function (_React$Component) {
     return React.createElement(
       'div',
       { className: 'checkbox-tree' },
-      this.renderItems()
+      ' ',
+      this.renderItems(),
+      ' '
     );
   };
 
