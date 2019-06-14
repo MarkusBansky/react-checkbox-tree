@@ -6,7 +6,7 @@ import CheckboxTree from '../../src/CheckboxTree'
 
 const data = [
   {
-    'id': 2,
+    'id': 1,
     'name': 'Europe',
     'code': 'EU',
     'countries': [

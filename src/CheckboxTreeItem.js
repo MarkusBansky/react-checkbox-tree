@@ -16,7 +16,7 @@ export class CheckboxTreeItem extends React.Component {
     // they can be variable and have shortcuts
     this.state = {
       checkedState: props.checked ? props.checked : 'unchecked',
-      isExpanded: false
+      isExpanded: this.props.type === 'root'
     }
 
     // Set if this is a leaf
@@ -39,7 +39,7 @@ export class CheckboxTreeItem extends React.Component {
 
     let values = {}
 
-    if (checkedState === 'checked') {
+    if (checkedState === 'checked' && type !== 'root') {
       values[type] = [value]
     } else {
       let childValues = _.map(this.childCheckboxItems.filter(c => c.checkedState !== 'unchecked'), c => c.getValues())
@@ -80,18 +80,17 @@ export class CheckboxTreeItem extends React.Component {
       newState = 'indeterminate'
     }
 
-    // Change state in the parent only if current state is different than before
-    if (newState !== this.state.checkedState) {
-      this.setState(
-        { ...this.state, checkedState: newState },
-        // Go to parent and set parent child checked
-        () => this.setItemCheckedStateInParent(
-          this.props.id,
-          newState,
-          callback))
-    } else if (callback) {
-      callback()
-    }
+    // if (newState === 'unchecked' || newState !== this.state.checkedState) {
+    this.setState(
+      { ...this.state, checkedState: newState },
+      // Go to parent and set parent child checked
+      () => this.setItemCheckedStateInParent(
+        this.props.id,
+        newState,
+        callback))
+    // } else if (callback) {
+    //   callback()
+    // }
   }
 
   setCheckedState (state, callback) {
@@ -183,6 +182,10 @@ export class CheckboxTreeItem extends React.Component {
   render () {
     const { checkedState, isExpanded } = this.state
     const { depth, label, id } = this.props
+
+    if (this.props.type === 'root') {
+      return this.renderChildren()
+    }
 
     // Render current item and all children
     return <div style={style(depth)} className='checkbox-item'>

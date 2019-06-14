@@ -12,16 +12,9 @@ class CheckboxTree extends React.Component {
     this.isRoot = true
     // Define the checked field holding all checked nodes data
     this.checked = {}
-    // Handle all the children nodes here
-    this.childCheckboxItems = []
 
     // Bind methods
     this.onUpdateTree = this.onUpdateTree.bind(this)
-    this.pushChildToRef = this.pushChildToRef.bind(this)
-  }
-
-  pushChildToRef (ref) {
-    this.childCheckboxItems.push(ref)
   }
 
   onUpdateTree () {
@@ -32,10 +25,10 @@ class CheckboxTree extends React.Component {
     _.each(accessors, a => { this.checked[a.type] = [] })
 
     // Get all data from child and insert into the checked status
-    let values = _.map(this.childCheckboxItems, c => c.getValues())
-    _.map(values, v => _.map(accessors, a => {
-      if (v[a.type]) this.checked[a.type] = v[a.type]
-    }))
+    let values = this.refs.root.getValues()
+    _.map(accessors, a => {
+      if (values[a.type]) this.checked[a.type] = values[a.type]
+    })
 
     // Debug all values selected in the tree
     console.log('Checked tree values: ' + JSON.stringify(this.checked))
@@ -45,24 +38,34 @@ class CheckboxTree extends React.Component {
     if (onChange) onChange(this.checked)
   }
 
-  renderItems () {
+  render () {
     const { data, accessors } = this.props
-    console.log('Creating a checkbox tree with data: ', data, ' and accessors: ', accessors)
+    const foldedData = {
+      label: 'root',
+      value: 'root',
+      children: data
+    }
+    const foldedAccessors = [
+      {
+        label: 'label',
+        value: 'value',
+        leaves: 'children',
+        type: 'root'
+      },
+      ...accessors
+    ]
+    const foldedParameters = constructItemProperties(foldedData, foldedAccessors, 0, 'unchecked')
 
-    return _.map(data, (d, key) => {
-      return <CheckboxTreeItem
-        key={key}
-        ref={this.pushChildToRef}
+    return <div className='checkbox-tree' >
+      <CheckboxTreeItem
+        id={0}
+        ref='root'
         onUpdateTree={this.onUpdateTree}
         checkboxPlusIcon={this.props.checkboxPlusIcon}
         checkboxMinusIcon={this.props.checkboxMinusIcon}
-        {...constructItemProperties(d, accessors, 0, 'unchecked')}
+        {...foldedParameters}
       />
-    })
-  }
-
-  render () {
-    return <div className='checkbox-tree' > {this.renderItems()} </div>
+    </div>
   }
 }
 
