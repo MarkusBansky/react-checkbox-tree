@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import 'jquery'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react'
 import { render } from 'react-dom'
 import CheckboxTree from '../../src/CheckboxTree'

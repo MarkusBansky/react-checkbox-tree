@@ -47,6 +47,8 @@ const data = [
 ```
 This part of code above creates a simple tree with one root node, that has one childand that child has one leaf.
 
+If needed you can set the `checkedState` field in each node to define its' initial checked state. The `checkedState` parameter can be set to `checked` or `unchecked` as a string.
+
 ### Accessors
 The **accessor** has a structure like this:
 

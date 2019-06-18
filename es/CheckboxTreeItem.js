@@ -14,7 +14,7 @@ import { constructItemProperties } from './helperFunctions';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 var style = function style(depth) {
-  return { marginLeft: depth * 15 + 'px' };
+  return { marginLeft: (depth - 1) * 15 + 'px' };
 };
 
 export var CheckboxTreeItem = function (_React$Component) {
@@ -31,7 +31,7 @@ export var CheckboxTreeItem = function (_React$Component) {
 
     _this.state = {
       checkedState: props.checked ? props.checked : 'unchecked',
-      isExpanded: false
+      isExpanded: _this.props.type === 'root'
 
       // Set if this is a leaf
     };_this.isLeaf = !(_this.props.children && _this.props.children.length > 0);
@@ -58,7 +58,7 @@ export var CheckboxTreeItem = function (_React$Component) {
 
     var values = {};
 
-    if (checkedState === 'checked') {
+    if (checkedState === 'checked' && type !== 'root') {
       values[type] = [value];
     } else {
       var childValues = _.map(this.childCheckboxItems.filter(function (c) {
@@ -112,21 +112,21 @@ export var CheckboxTreeItem = function (_React$Component) {
       newState = 'indeterminate';
     }
 
-    // Change state in the parent only if current state is different than before
-    if (newState !== this.state.checkedState) {
-      this.setState(_extends({}, this.state, { checkedState: newState }),
-      // Go to parent and set parent child checked
-      function () {
-        return _this2.setItemCheckedStateInParent(_this2.props.id, newState, callback);
-      });
-    } else if (callback) {
-      callback();
-    }
+    // if (newState === 'unchecked' || newState !== this.state.checkedState) {
+    this.setState(_extends({}, this.state, { checkedState: newState }),
+    // Go to parent and set parent child checked
+    function () {
+      return _this2.setItemCheckedStateInParent(_this2.props.id, newState, callback);
+    });
+    // } else if (callback) {
+    //   callback()
+    // }
   };
 
   CheckboxTreeItem.prototype.setCheckedState = function setCheckedState(state, callback) {
     var _this3 = this;
 
+    var isExpanded = this.state.isExpanded;
     var children = this.props.children;
 
     // Change the state of checkedState input box for the item
@@ -145,7 +145,7 @@ export var CheckboxTreeItem = function (_React$Component) {
     // If it is expanded then change the state of all children
     // And also set checkedState for every child
     // Object can only be in epanded state if it has children
-    if (children) {
+    if (isExpanded && children && this.childCheckboxItems) {
       // isExpanded
       _.map(this.childCheckboxItems, function (c) {
         return c.setCheckedState(state);
@@ -209,7 +209,10 @@ export var CheckboxTreeItem = function (_React$Component) {
         children = _props2.children;
 
 
-    if (!isExpanded) return '';
+    if (!isExpanded) {
+      this.childCheckboxItems = [];
+      return '';
+    }
 
     // Render all the children
     return _.map(children, function (d, key) {
@@ -235,8 +238,12 @@ export var CheckboxTreeItem = function (_React$Component) {
         label = _props3.label,
         id = _props3.id;
 
-    // Render current item and all children
 
+    if (this.props.type === 'root') {
+      return this.renderChildren();
+    }
+
+    // Render current item and all children
     return React.createElement(
       'div',
       { style: style(depth), className: 'checkbox-item' },

@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { constructItemProperties } from './helperFunctions'
 
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
-
 const style = (depth) => { return { marginLeft: `${(depth - 1) * 15}px` } }
 
 export class CheckboxTreeItem extends React.Component {
@@ -142,8 +140,7 @@ export class CheckboxTreeItem extends React.Component {
     let minus = this.props.checkboxMinusIcon ? this.props.checkboxMinusIcon : '-'
 
     return <span
-      onClick={() => this.setState({ ...this.state, isExpanded: !isExpanded })}
-      className='arrow'>
+      onClick={() => this.setState({ ...this.state, isExpanded: !isExpanded })}>
       {isExpanded ? minus : plus}
     </span>
   }
