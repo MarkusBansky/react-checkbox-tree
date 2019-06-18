@@ -17,18 +17,21 @@ class CheckboxTree extends React.Component {
     this.onUpdateTree = this.onUpdateTree.bind(this)
   }
 
+  getValues () {
+    // Get the values from root component
+    let values = this.refs.root.getValues()
+
+    // Delete the root values data
+    delete values.root
+
+    return values
+  }
+
   onUpdateTree () {
-    const { onChange, accessors } = this.props
+    const { onChange } = this.props
 
     // Reset the checked state
-    this.checked = {}
-    _.each(accessors, a => { this.checked[a.type] = [] })
-
-    // Get all data from child and insert into the checked status
-    let values = this.refs.root.getValues()
-    _.map(accessors, a => {
-      if (values[a.type]) this.checked[a.type] = values[a.type]
-    })
+    this.checked = this.getValues()
 
     // Debug all values selected in the tree
     console.log('Checked tree values: ' + JSON.stringify(this.checked))

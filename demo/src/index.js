@@ -68,11 +68,23 @@ const accessors = [
 ]
 
 class Demo extends React.Component {
+  constructor (params) {
+    super(params)
+
+    this.action = this.action.bind(this)
+  }
+
+  action (s) {
+    console.log(this.refs.tree.getValues())
+  }
+
   render () {
     return <div style={{ margin: '150px' }}>
       <CheckboxTree
+        ref='tree'
         data={data}
         accessors={accessors}
+        onChange={this.action}
       />
     </div>
   }
